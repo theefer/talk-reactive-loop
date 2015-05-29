@@ -1,0 +1,32 @@
+{
+  "name": "reactive-loop-demo",
+  "version": "1.0.0",
+  "description": "Demo for the Reactive Loop talk",
+  "main": "index.js",
+  "scripts": {
+    "postinstall": "jspm install",
+    "start": "http-server",
+    "watch": "livereload",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Sébastien Cevey <seb@cine7.net>",
+  "license": "GPL",
+  "devDependencies": {
+    "http-server": "^0.8.0",
+    "jspm": "~0.15.6",
+    "livereload": "^0.3.7"
+  },
+  "jspm": {
+    "directories": {},
+    "dependencies": {
+      "moment": "github:moment/moment@^2.10.3",
+      "rx": "npm:rx@~2.5.2",
+      "vdom-virtualize": "npm:vdom-virtualize@^0.0.7",
+      "virtual-dom": "npm:virtual-dom@~2.0.1"
+    },
+    "devDependencies": {
+      "traceur": "github:jmcriffey/bower-traceur@0.0.88",
+      "traceur-runtime": "github:jmcriffey/bower-traceur-runtime@0.0.88"
+    }
+  }
+}
