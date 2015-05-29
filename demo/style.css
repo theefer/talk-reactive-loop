@@ -1,0 +1,56 @@
+html {
+  background-color: #333;
+  color: #ccc;
+  font-size: 18px;
+  margin: 10px;
+}
+
+h2 {
+  font-size: 120%;
+  margin-bottom: 0.25em;
+}
+
+input {
+  background-color: #333;
+  color: #ccc;
+  border: 0;
+  border-bottom: 1px solid #ccc;
+  outline: none;
+  font-size: inherit;
+}
+
+input[type='text'] {
+  margin-right: 1em;
+}
+
+input[type='checkbox'] {
+  margin-right: 0.5em;
+}
+
+img {
+  max-width: 200px;
+  max-height: 160px;
+}
+
+
+.image {
+  display: inline-block;
+  width: 200px;
+  height: 160px;
+  vertical-align: middle;
+  text-align: center;
+  margin: 2px;
+  background-color: #444;
+}
+
+.image img {
+  transition: opacity 0.2s ease-in;
+  -webkit-transition: opacity 0.3s ease-in;
+  opacity: 1;
+}
+
+.image--loading img {
+  transition: opacity 0.2s ease-in;
+  -webkit-transition: opacity 0.3s ease-in;
+  opacity: 0;
+}
