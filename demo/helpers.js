@@ -10,9 +10,9 @@ export function container$(tagName, children) {
     children,
     (...views) => h(tagName, [...views])
   );
-}
+};
 
-function sequenceCombine$(observables$) {
+export function sequenceCombine$(observables$) {
   // Work around odd behaviour of combineLatest with empty Array
   // (never yields a value)
   if (observables$.length === 0) {
@@ -20,9 +20,9 @@ function sequenceCombine$(observables$) {
   } else {
     return Rx.Observable.combineLatest(observables$, (...all) => all);
   }
-}
+};
 
-function preloadImage$(src) {
+export function preloadImage$(src) {
   const loaded = new Promise((resolve, reject) => {
     const image = new Image();
     image.addEventListener('load', resolve);
@@ -30,4 +30,4 @@ function preloadImage$(src) {
     image.src = src;
   });
   return Rx.Observable.fromPromise(loaded);
-}
+};
