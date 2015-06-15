@@ -40,49 +40,32 @@ function searchImages$({query, free}) {
 // import {searchImages} from './fake-api';
 
 
+import {inputComponent} from './components';
 
-function inputElement(value, changed$) {
-  return h('input', {
-    type: 'text',
-    placeholder: 'Enter query...',
-    value: value,
-    oninput: (event) => changed$.onNext(event)
-  });
-}
-
-function inputView() {
-  const changed$ = new Rx.Subject;
-
-  function render$(model) {
-    return model.value$.map(val => inputElement(val, changed$));
-  }
-
-  return {
-    render$,
-    events: {changed$}
-  };
-}
-
-function inputIntent(view) {
-  return {
-    update$: view.events.changed$.map(ev => ev.target.value)
-  };
-}
-
-function inputModel(intent) {
-  return {
-    value$: intent.update$.startWith('')
-  };
-}
-
-
-function inputComponent() {
+/*
+export function inputComponent() {
   const view = inputView();
   const model = inputModel(inputIntent(view));
 
   return {
-    model,
+    model: {
+      value$: model.value$
+    },
     tree$: view.render$(model)
+  };
+}
+*/
+
+
+import {checkboxComponent} from './components';
+
+function freeFilter() {
+  const choice = checkboxComponent();
+  const tree$ = choice.tree$.map(tree => h('label', [tree, 'free only']));
+
+  return {
+    model: choice.model,
+    tree$: tree$
   };
 }
 
@@ -90,12 +73,14 @@ function inputComponent() {
 
 function filtersComponent() {
   const query = inputComponent();
+  const free = freeFilter();
 
   return {
     model: {
-      query$: query.model.value$
+      query$: query.model.value$,
+      free$:  free.model.value$
     },
-    tree$: query.tree$
+    tree$: container$('form', [query.tree$, free.tree$])
   };
 }
 
