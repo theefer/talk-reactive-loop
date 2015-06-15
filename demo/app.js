@@ -19,7 +19,7 @@ import reqwest from 'reqwest';
 
 import {mediaApiUri} from './api-config';
 
-function searchImages({query, free}) {
+function searchImages$({query, free}) {
   const freeFilter = free ? {free: true} : {};
   const req = reqwest({
     url: `${mediaApiUri}/images`,
@@ -99,11 +99,30 @@ function filtersComponent() {
   };
 }
 
+function imageCell(src) {
+  return h(`span.image`, [
+    h('img', {src})
+  ]);
+}
+
+function resultListComponent() {
+  const heading$ = $Obs.return(h('h2', `Search results`));
+
+  const tree$ = heading$;
+
+  return {tree$};
+}
+
 
 function view() {
   const filters = filtersComponent();
 
-  const tree$ = filters.tree$;
+  const resultList = resultListComponent();
+
+  const tree$ = container$('div', [
+    filters.tree$,
+    resultList.tree$
+  ]);
 
   return {
     tree$
