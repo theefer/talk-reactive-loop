@@ -84,16 +84,29 @@ function filtersComponent() {
   };
 }
 
-function imageCell(src) {
-  return h(`span.image`, [
+function imageCell(src, loaded) {
+  const klass = loaded ? 'image--loaded' : 'image--loading';
+  return h(`span.image.${klass}`, [
     h('img', {src})
   ]);
 }
 
-function resultListComponent() {
-  const heading$ = $Obs.return(h('h2', `Search results`));
+function resultListComponent(query$, results$) {
+  const heading$ = query$.map(query => h('h2', `Search results for "${query}"`));
 
-  const tree$ = heading$;
+  const resultList$ = results$.flatMapLatest(results => {
+    return container$('div', results.data.map(result => {
+      const src = result.data.thumbnail.secureUrl;
+      return preloadImage$(src).
+        map(() => imageCell(src, true)).
+        startWith(imageCell(src, false));
+    }));
+  });
+
+  const tree$ = container$('div', [
+    heading$,
+    resultList$
+  ]);
 
   return {tree$};
 }
@@ -102,7 +115,20 @@ function resultListComponent() {
 function view() {
   const filters = filtersComponent();
 
-  const resultList = resultListComponent();
+  const query$ = filters.model.query$.debounce(500);
+  const free$ = filters.model.free$;
+
+  const ticker$ = $Obs.timer(0, 1000);
+  const searchQuery$ = $Obs.combineLatest(
+    query$,
+    free$,
+    ticker$,
+    (query, free, _) => ({query, free})
+  );
+
+  const results$ = searchQuery$.flatMapLatest(searchQuery => searchImages$(searchQuery));
+
+  const resultList = resultListComponent(query$, results$);
 
   const tree$ = container$('div', [
     filters.tree$,
