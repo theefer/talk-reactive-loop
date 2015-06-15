@@ -6,10 +6,8 @@ import Rx from 'rx';
 const $Obs = Rx.Observable;
 
 export function container$(tagName, children) {
-  return $Obs.combineLatest(
-    children,
-    (...views) => h(tagName, [...views])
-  );
+  return sequenceCombine$(children).
+    map(views => h(tagName, [...views]));
 };
 
 export function sequenceCombine$(observables$) {
